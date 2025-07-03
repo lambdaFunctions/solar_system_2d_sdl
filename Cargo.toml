@@ -1,0 +1,13 @@
+[package]
+name = "solar_system_2d_sdl"
+version = "0.1.0"
+edition = "2021"
+
+# [target.'cfg(target_os="macos")'.dependencies.sdl2]
+# features=["bundled"]
+# version="0.36.0"
+
+[dependencies]
+# dotenv = "0.15.0"
+sdl2 = "*"
+rand = "0.8"
