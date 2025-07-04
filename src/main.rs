@@ -70,9 +70,9 @@ fn main() {
     let mut earth: Body = Body::new(
         Color::RGB(255, 255, 255), 
         vec![250.0, 300.0],
-        vec![0.0_f32, 0.0_f32],
+        vec![0.0_f32, 2.5_f32],
         10.0,
-        1.0 // 5.972 * 10.0_f32.powf(24.0)
+        10.0 // 5.972 * 10.0_f32.powf(24.0)
     );
 
     let mut sun: Body = Body::new(
@@ -109,10 +109,10 @@ fn main() {
         );
 
         earth.change_velocity(earth_acceleration.0 * DT, earth_acceleration.1 * DT);
-        earth.change_position(earth.velocity[0] * DT, earth.velocity[1] * DT);
+        earth.change_position(earth.velocity[0], earth.velocity[1]);
 
         sun.change_velocity(sun_acceleration.0 * DT, sun_acceleration.1 * DT);
-        sun.change_position(sun.velocity[0] * DT, sun.velocity[1] * DT);
+        sun.change_position(sun.velocity[0], sun.velocity[1]);
 
         print_debug(earth_gravity_force, earth_acceleration, &earth);
 

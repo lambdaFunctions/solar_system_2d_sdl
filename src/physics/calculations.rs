@@ -7,10 +7,11 @@ pub const G_FORCE: f32 = 1.0;
 pub fn compute_gravity(body_1: &Body, body_2: &Body) -> (f32, f32) {
     let dx: f32 = body_2.position[0] - body_1.position[0];
     let dy: f32 = body_2.position[1] - body_1.position[1];
-    let distance_sqr: f32 = dx.powf(2.0) + dy.powf(2.0);
-    let distance: f32 = distance_sqr.sqrt();
 
-    let force: f32 = G_FORCE * body_2.mass * body_1.mass / distance_sqr;
+    let distance: f32 = (dx.powf(2.0) + dy.powf(2.0)).sqrt();
+
+    let force: f32 = G_FORCE * body_2.mass * body_1.mass / distance.powf(2.0);
+
     let fx: f32 = force * dx / distance;
     let fy: f32 = force * dy / distance;
 
