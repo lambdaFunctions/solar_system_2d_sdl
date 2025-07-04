@@ -1,6 +1,6 @@
 use std::vec;
 // use std::time::Duration;
-use std::{thread, time::Duration, io::{stdout, Write}};
+use std::{time::Duration, io::{stdout, Write}};
 
 use sdl2::rect::Rect;
 use sdl2::pixels::Color;
@@ -14,6 +14,7 @@ use physics::calculations::{compute_gravity, compute_acceleration};
 
 
 static DT: f32 = 1.0; // 86400
+
 
 fn print_debug(
     earth_gravity_force: (f32, f32), earth_acceleration: (f32, f32), earth: &Body
@@ -38,8 +39,8 @@ fn print_debug(
 
     // Flush to update terminal
     stdout.flush().unwrap();
-    thread::sleep(Duration::from_millis(50));
 }
+
 
 fn main() {
     let screen_width: u32 = 1000;
@@ -68,7 +69,8 @@ fn main() {
     let mut event_queue: sdl2::EventPump = sdl_context.event_pump().unwrap();    
 
     let mut earth: Body = Body::new(
-        Color::RGB(255, 255, 255), 
+        // Color::RGB(255, 255, 255), 
+        Color::RGB(0, 191, 255), 
         vec![250.0, 300.0],
         vec![0.0_f32, 2.5_f32],
         10.0,
@@ -118,7 +120,7 @@ fn main() {
 
         canvas.present();
 
-        ::std::thread::sleep(Duration::from_millis(16));
+        ::std::thread::sleep(Duration::from_millis(56));
    }
 }
 
