@@ -1,5 +1,6 @@
 use std::vec;
-use std::time::Duration;
+// use std::time::Duration;
+use std::{thread, time::Duration, io::{stdout, Write}};
 
 use sdl2::rect::Rect;
 use sdl2::pixels::Color;
@@ -11,7 +12,34 @@ mod physics;
 use physics::bodies::Body;
 use physics::calculations::{compute_gravity, compute_acceleration};
 
+
 static DT: f32 = 1.0; // 86400
+
+fn print_debug(
+    earth_gravity_force: (f32, f32), earth_acceleration: (f32, f32), earth: &Body
+) {
+    let mut stdout = stdout();
+
+    println!("\rEarth gravity force: {} | {}", earth_gravity_force.0, earth_gravity_force.1);
+    println!("\rEarth acceleration: {} | {}", earth_acceleration.0, earth_acceleration.1);
+    println!("\rEarth velocity: {} | {}", earth.velocity[0], earth.velocity[1]);
+    println!("\rEarth position X: {}", earth.position[0]);
+    println!("\rEarth position Y: {}", earth.position[1]);
+
+    // Move the cursor up 
+    print!("\x1B[5A");
+
+    // Overwrite each line
+    print!("\rEarth gravity force: {} | {}", earth_gravity_force.0, earth_gravity_force.1);
+    print!("\rEarth acceleration: {} | {}", earth_acceleration.0, earth_acceleration.1);
+    print!("\rEarth velocity: {} | {}", earth.velocity[0], earth.velocity[1]);
+    print!("\rEarth position X: {}", earth.position[0]);
+    print!("\rEarth position Y: {}", earth.position[1]);
+
+    // Flush to update terminal
+    stdout.flush().unwrap();
+    thread::sleep(Duration::from_millis(50));
+}
 
 fn main() {
     let screen_width: u32 = 1000;
@@ -42,7 +70,7 @@ fn main() {
     let mut earth: Body = Body::new(
         Color::RGB(255, 255, 255), 
         vec![250.0, 300.0],
-        vec![0.5_f32, 0.5_f32],
+        vec![0.0_f32, 0.0_f32],
         10.0,
         1.0 // 5.972 * 10.0_f32.powf(24.0)
     );
@@ -75,27 +103,22 @@ fn main() {
             earth_gravity_force.0, earth_gravity_force.1, earth.mass
         );
 
-        // let sun_gravity_force: (f32, f32) = (-earth_gravity_force.0, -earth_gravity_force.1);
-        // let sun_acceleration: (f32, f32) = compute_acceleration(
-        //     sun_gravity_force.0, sun_gravity_force.1, sun.mass
-        // );
+        let sun_gravity_force: (f32, f32) = (-earth_gravity_force.0, -earth_gravity_force.1);
+        let sun_acceleration: (f32, f32) = compute_acceleration(
+            sun_gravity_force.0, sun_gravity_force.1, sun.mass
+        );
 
         earth.change_velocity(earth_acceleration.0 * DT, earth_acceleration.1 * DT);
         earth.change_position(earth.velocity[0] * DT, earth.velocity[1] * DT);
 
-        // sun.change_velocity(sun_acceleration.0 * DT, sun_acceleration.1 * DT);
-        // sun.change_position(sun.velocity[0] * DT, sun.velocity[1] * DT);
+        sun.change_velocity(sun_acceleration.0 * DT, sun_acceleration.1 * DT);
+        sun.change_position(sun.velocity[0] * DT, sun.velocity[1] * DT);
 
-        println!("**************** DEBUG ********************");
-        println!("\rEarth gravity force: {} | {}", earth_gravity_force.0, earth_gravity_force.1);
-        println!("\rEarth acceleration: {} | {}", earth_acceleration.0, earth_acceleration.1);
-        println!("\rEarth velocity: {} | {}", earth.velocity[0], earth.velocity[1]);
-        println!("\rEarth position X: {}", earth.position[0]);
-        println!("\rEarth position Y: {}", earth.position[1]);
-        println!();
+        print_debug(earth_gravity_force, earth_acceleration, &earth);
 
         canvas.present();
 
         ::std::thread::sleep(Duration::from_millis(16));
    }
 }
+

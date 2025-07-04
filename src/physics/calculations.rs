@@ -2,7 +2,7 @@ use super::bodies::Body;
 
 
 // pub const G_FORCE: f32 = 6.6743e-11;
-pub const G_FORCE: f32 = 0.5; 
+pub const G_FORCE: f32 = 1.0; 
 
 pub fn compute_gravity(body_1: &Body, body_2: &Body) -> (f32, f32) {
     let dx: f32 = body_2.position[0] - body_1.position[0];
@@ -23,3 +23,4 @@ pub fn compute_acceleration(force_x: f32, force_y: f32, mass: f32) -> (f32, f32)
 
     return (ax, ay)
 }
+
